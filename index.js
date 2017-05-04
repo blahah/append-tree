@@ -7,6 +7,7 @@ var inherits = require('inherits')
 var events = require('events')
 var cache = require('array-lru')
 var nextTick = require('process-nextick-args')
+var path = require('path')
 
 module.exports = Tree
 
@@ -430,7 +431,7 @@ Tree.prototype.diff = function (toTree, opts) {
     if (!isPut && !diffDels) return
 
     var name = node.name
-    var nameDir = '/' + split(name).slice(0, split(dir).length + 1).join('/')
+    var nameDir = join(split(name).slice(0, split(dir).length + 1))
 
     if (name === nameDir) {
       result.push({
@@ -634,11 +635,11 @@ Tree.prototype._defaultOpts = function (opts) {
 }
 
 function join (names) {
-  return '/' + names.join('/')
+  return path.sep + names.join(path.sep)
 }
 
 function split (name) {
-  var list = name.split('/')
+  var list = name.split(path.sep)
   if (list[0] === '') list.shift()
   if (list[list.length - 1] === '') list.pop()
   return list
